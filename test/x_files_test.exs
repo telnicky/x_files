@@ -22,12 +22,12 @@ defmodule XFilesTest do
     end
   end
 
-  describe "XFiles.search" do
+  describe "XFiles.lookup" do
     test "it returns a list with the case files in it, when given an existing file" do
       file = "Samantha Ann Mulder was abducted by aliens from her home"
       mock XFiles.Api, :search, {:ok, [file]}
 
-      files = XFiles.search(file)
+      files = XFiles.lookup(file)
 
       assert Enum.find(files, fn (f) -> f == file end)
     end
@@ -37,7 +37,7 @@ defmodule XFilesTest do
       file = "Samantha Ann Mulder was abducted by aliens from her home"
       mock XFiles.Api, :search, {:ok, [file]}
 
-      XFiles.search(file)
+      XFiles.lookup(file)
 
       assert_called XFiles.Api, :search, [["abducted", "aliens"]]
     end
@@ -46,7 +46,7 @@ defmodule XFilesTest do
       file = "Stolen car"
       mock XFiles.Api, :search, {:ok, []}
 
-      files = XFiles.search(file)
+      files = XFiles.lookup(file)
 
       assert Enum.empty?(files)
     end
@@ -55,7 +55,7 @@ defmodule XFilesTest do
       file = "Stolen car"
       mock XFiles.Api, :search, {:error, []}
 
-      files = XFiles.search(file)
+      files = XFiles.lookup(file)
 
       assert Enum.empty?(files)
     end

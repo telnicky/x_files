@@ -14,17 +14,17 @@ defmodule XFiles do
     String.contains?(file, @keywords)
   end
 
-  def search(file) do
+  def lookup(file) do
     terms =
       file
       |> String.split(" ")
-      |> Enum.into(HashSet.new)
-      |> Set.intersection(Enum.into(@keywords, HashSet.new))
-      |> Set.to_list
+      |> Enum.into(MapSet.new)
+      |> MapSet.intersection(Enum.into(@keywords, MapSet.new))
+      |> MapSet.to_list
 
     case @api.search(terms) do
       {:ok, results} -> results
-      {:error, error} -> []
+      {:error, _error} -> []
     end
   end
 end
