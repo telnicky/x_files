@@ -3,16 +3,28 @@ defmodule XFiles do
   Documentation for XFiles.
   """
 
-  @doc """
-  Hello world.
+  @api Mockery.of("XFiles.Api")
 
-  ## Examples
+  @keywords [
+    "aliens",
+    "abducted"
+  ]
 
-      iex> XFiles.hello
-      :world
+  def case?(file) do
+    String.contains?(file, @keywords)
+  end
 
-  """
-  def hello do
-    :world
+  def search(file) do
+    terms =
+      file
+      |> String.split(" ")
+      |> Enum.into(HashSet.new)
+      |> Set.intersection(Enum.into(@keywords, HashSet.new))
+      |> Set.to_list
+
+    case @api.search(terms) do
+      {:ok, results} -> results
+      {:error, error} -> []
+    end
   end
 end
